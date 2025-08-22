@@ -2,13 +2,14 @@ import aiohttp
 import asyncio
 import ssl
 from typing import List
+from config import OPEN_FOOD_FACTS_URL
 from app.open_food_app.shemas.open_food_facts_shemas import OpenFoodFactsProduct
 from pprint import pprint
 
 
 class CaloriesService:
     def __init__(self):
-        self.base_url = "https://world.openfoodfacts.org/cgi/search.pl"
+        self.base_url = OPEN_FOOD_FACTS_URL
         self.json_param = 1
         self.search_simple_param = 1
         self.action_param = "process"
