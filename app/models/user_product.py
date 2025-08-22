@@ -10,7 +10,7 @@ class UserProduct(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     product_id = Column(Integer, ForeignKey("products.id"))
-    amount = Column(Float) # в граммах
+    amount = Column(Float)  # в граммах
     user = relationship("User", back_populates="user_products")
     product = relationship("Product", back_populates="user_products")
     datetime = Column(DateTime, default=datetime.datetime.now)
