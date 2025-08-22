@@ -9,13 +9,14 @@ bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
 
-
 @dp.message(CommandStart())
 async def start_command(message: Message):
     await message.answer("Hello, world!")
 
+
 dp.message.register(open_food_handler)
 dp.callback_query.register(product_callback, lambda c: c.data.startswith("product_"))
+
 
 async def main():
     await dp.start_polling(bot)

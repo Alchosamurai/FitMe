@@ -29,13 +29,13 @@ async def calculate_calories(message: Message) -> None:
     except ValueError:
         await message.answer("Введите число")
         return
-    
+
     product = user_products[message.from_user.id]
     calories = CaloriesService.calculate_calories(product, amount)
     fat = CaloriesService.calculate_fat(product, amount)
     carbohydrates = CaloriesService.calculate_carbohydrates(product, amount)
     protein = CaloriesService.calculate_protein(product, amount)
-    
+
     await message.answer(
         f"Калории: {calories} ккал\nЖиры: {fat} г\nУглеводы: {carbohydrates} г\nБелки: {protein} г"
     )
@@ -45,16 +45,20 @@ async def calculate_calories(message: Message) -> None:
 async def product_callback(callback: CallbackQuery):
     try:
         product_uuid = callback.data.split("_")[1]
-        
+
         # Получаем продукт по UUID
-        product = await CaloriesService().get_product_by_uuid(product_uuid)  # Нужно реализовать поиск по UUID
+        product = await CaloriesService().get_product_by_uuid(
+            product_uuid
+        )  # Нужно реализовать поиск по UUID
         if product:
             user_products[callback.from_user.id] = product
-            await callback.message.answer("Введите потребленное количество продукта в граммах")
+            await callback.message.answer(
+                "Введите потребленное количество продукта в граммах"
+            )
         else:
             await callback.message.answer("Продукт не найден")
-            
+
     except Exception as e:
         await callback.message.answer(f"Ошибка: {str(e)}")
-    
+
     await callback.answer()

@@ -8,18 +8,14 @@ def get_products_list_keyboard(
     buttons = []
     for product in products:
         callback_data = f"product_{product.uuid}"
-        
+
         # Проверяем длину callback_data (Telegram ограничивает до 64 байт)
-        if len(callback_data.encode('utf-8')) > 64:
+        if len(callback_data.encode("utf-8")) > 64:
             # Если слишком длинный, используем только UUID
             callback_data = product.uuid[:50]  # Оставляем только первые 50 символов
-        
+
         buttons.append(
-            [
-                InlineKeyboardButton(
-                    text=str(product), callback_data=callback_data
-                )
-            ]
+            [InlineKeyboardButton(text=str(product), callback_data=callback_data)]
         )
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)
