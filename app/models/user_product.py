@@ -1,16 +1,22 @@
 import datetime
-from sqlalchemy import Column, Integer, Float, DateTime
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql.schema import ForeignKey
+from typing import TYPE_CHECKING
+from sqlalchemy import Float, DateTime, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.database import Base
+
+if TYPE_CHECKING:
+    from app.models.user import User
+    from app.models.product import Product
 
 
 class UserProduct(Base):
     __tablename__ = "user_products"
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    product_id = Column(Integer, ForeignKey("products.id"))
-    amount = Column(Float)  # в граммах
-    user = relationship("User", back_populates="user_products")
-    product = relationship("Product", back_populates="user_products")
-    datetime = Column(DateTime, default=datetime.datetime.now)
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"))
+    amount: Mapped[float] = mapped_column(Float)
+    datetime: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.now)
+    
+    user: Mapped["User"] = relationship("User", back_populates="user_products")
+    product: Mapped["Product"] = relationship("Product", back_populates="user_products")
