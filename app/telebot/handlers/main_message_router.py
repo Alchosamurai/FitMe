@@ -24,3 +24,4 @@ async def main_message_handler(message: Message):
             await message.answer("Введите дату:")
         case _: 
             await message.answer("Я не знаю, что делать с этим сообщением.")
+            
