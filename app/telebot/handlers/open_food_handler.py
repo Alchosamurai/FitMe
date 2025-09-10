@@ -37,12 +37,15 @@ async def calculate_calories(message: Message) -> None:
     protein = CaloriesService.calculate_protein(product, amount)
 
     await message.answer(
-        f"Калории: {calories} ккал\nЖиры: {fat} г\nУглеводы: {carbohydrates} г\nБелки: {protein} г"
+        f"Калории: {calories} ккал\nЖиры: {fat} г\nУглеводы: {
+            carbohydrates} г\nБелки: {protein} г"
     )
     del user_products[message.from_user.id]
 
 
 async def product_callback(callback: CallbackQuery):
+    if callback is None:
+        return
     try:
         product_uuid = callback.data.split("_")[1]
 

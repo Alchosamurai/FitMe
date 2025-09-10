@@ -16,12 +16,11 @@ async def main_message_handler(message: Message):
             await message.answer("""Привет! Я бот для подсчета калорий.
                 Чтобы начать, просто введи назнвание блюда/продукта.""")
         case UserState.ADD_PRODUCT:
-            await message.answer("Введите название продукта:")
-            
+            await message.answer("Введите название продукта: ")
         case UserState.ADD_PRODUCT_AMOUNT:
             await message.answer("Введите количество продукта:")
         case UserState.ADD_PRODUCT_DATE:
             await message.answer("Введите дату:")
-        case _: 
+        case _:
             await message.answer("Я не знаю, что делать с этим сообщением.")
-            
+
