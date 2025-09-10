@@ -1,4 +1,4 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 from app.open_food_app.shemas.open_food_facts_shemas import OpenFoodFactsProduct
 
 
@@ -19,3 +19,12 @@ def get_products_list_keyboard(
         )
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+def get_report_keyboard() -> ReplyKeyboardMarkup:
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="📊 Отчет за день")]
+        ],
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )

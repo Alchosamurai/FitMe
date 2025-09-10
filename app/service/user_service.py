@@ -2,10 +2,10 @@ import datetime
 from collections import defaultdict
 from app.repo.meal_repo import MealRepo
 from app.repo.user_repo import UserRepo, UserDailyRepo
-from app.models.user_model import UserBase, UserTargetBase
+from app.models.user_model import UserBase
 from app.models.meal_model import MealBase
-from app.shemas.report_shema import DailyReport, RangeReport, MealToReport, DaysToReport
-from app.utils.formulas import CalculateCPFC, CalculateWeight
+from app.shemas.report_shema import DailyReport, RangeReport, DaysToReport
+from app.utils.formulas import CalculateWeight
 from app.utils.mapper import MealMapper
 
 
@@ -91,5 +91,7 @@ class UserService:
             weight_diff=weight_diff,
         )
 
-    def get_month_report(self, user_id: int, month: datetime.month) -> RangeReport:
-        pass
+    def get_month_report(self, user_id: int, month: datetime.month = datetime.date.today().month) -> RangeReport:
+        start_date = datetime.date(datetime.date.today().year, month, 1)
+        end_date = datetime.date(datetime.date.today().year, month, 31)
+        return self.get_range_report_by_tg_id(user_id, start_date, end_date)

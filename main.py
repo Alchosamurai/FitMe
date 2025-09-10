@@ -4,6 +4,8 @@ from aiogram.types import Message
 import asyncio
 from config import BOT_TOKEN
 from app.telebot.handlers.open_food_handler import open_food_handler, product_callback
+from app.telebot.keyboards.products_list_keyboard import get_report_keyboard
+from aiogram.filters import Text
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
@@ -11,7 +13,12 @@ dp = Dispatcher()
 
 @dp.message(CommandStart())
 async def start_command(message: Message):
-    await message.answer("Hello, world!")
+    await message.answer("Hello, world!", reply_markup=get_report_keyboard())
+
+
+@dp.message(Text("📊 Отчет за день"))
+async def report_command(message: Message):
+    await message.answer("Отчет за день", reply_markup=get_report_keyboard())  
 
 
 dp.message.register(open_food_handler)
