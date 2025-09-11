@@ -1,4 +1,5 @@
 import datetime
+from typing import Optional
 from collections import defaultdict
 from app.repo.meal_repo import MealRepo
 from app.repo.user_repo import UserRepo, UserDailyRepo
@@ -16,13 +17,13 @@ class UserService:
         self.user_daily_repo = UserDailyRepo()
         self.meal_mapper = MealMapper()
 
-    def get_user_by_id(self, user_id: int) -> UserBase:
+    def get_user_by_id(self, user_id: int) -> Optional[UserBase]:
         return self.user_repo.get_by_id(user_id)
 
     def create_user(self, user: UserBase) -> UserBase:
         return self.user_repo.create(user)
 
-    def update_user(self, user: UserBase) -> UserBase:
+    def update_user(self, user: UserBase) -> Optional[UserBase]:
         return self.user_repo.update(user)
 
     def delete_user(self, user_id: int) -> None:
@@ -91,7 +92,9 @@ class UserService:
             weight_diff=weight_diff,
         )
 
-    def get_month_report(self, user_id: int, month: datetime.month = datetime.date.today().month) -> RangeReport:
+    def get_month_report(
+        self, user_id: int, month: datetime.month = datetime.date.today().month
+    ) -> RangeReport:
         start_date = datetime.date(datetime.date.today().year, month, 1)
         end_date = datetime.date(datetime.date.today().year, month, 31)
         return self.get_range_report_by_tg_id(user_id, start_date, end_date)

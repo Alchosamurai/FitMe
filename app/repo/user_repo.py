@@ -11,15 +11,16 @@ class UserRepo:
         return self.session.query(UserBase).filter(UserBase.id == user_id).first()
 
     def create(self, user: UserBase) -> UserBase:
-        if self.get_user_by_id(user.id):
+        if self.get_user_by_id(user.tg_id):
             return user
         self.session.add(user)
         self.session.commit()
         return user
 
-    def update(self, user: UserBase) -> None:
+    def update(self, user: UserBase) -> UserBase:
+        updated_user = self.session.merge(user)
         self.session.commit()
-        return
+        return updated_user
 
     def delete(self, user_id: int) -> None:
         user = self.get_user_by_id(user_id)
