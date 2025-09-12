@@ -39,3 +39,9 @@ class AsyncUserRepo:
         if user:
             await session.delete(user)
             await session.commit()
+
+
+class AsyncTargetRepo:
+    @a_connection()
+    async def get_by_tg_id():
+        pass

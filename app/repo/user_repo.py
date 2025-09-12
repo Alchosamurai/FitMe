@@ -1,17 +1,19 @@
 from typing import Optional
+
 from app.models.user_model import UserBase, UserTargetBase
 from app.database.database import get_db
+from sqlalchemy import select
 
 
 class UserRepo:
     def __init__(self):
-        self.session = get_db()
+        self.session = next(get_db())
 
     def get_by_id(self, user_id: int) -> UserBase | None:
         return self.session.query(UserBase).filter(UserBase.id == user_id).first()
 
     def create(self, user: UserBase) -> UserBase:
-        if self.get_user_by_id(user.tg_id):
+        if self.get_by_id(user.tg_id):
             return user
         self.session.add(user)
         self.session.commit()
@@ -23,7 +25,7 @@ class UserRepo:
         return updated_user
 
     def delete(self, user_id: int) -> None:
-        user = self.get_user_by_id(user_id)
+        user = self.get_by_id(user_id)
         if user:
             self.session.delete(user)
             self.session.commit()
@@ -36,7 +38,13 @@ class UserRepo:
 
 class UserDailyRepo:
     def __init__(self):
-        self.session = get_db()
+        self.session = next(get_db())
+
+    def get(self, user_daily_id: int) -> Optional[UserTargetBase]:
+        query = select(UserTargetBase).where(
+            UserTargetBase.id == user_daily_id)
+        target = self.session.execute(query)
+        return target.scalar_one_or_none()
 
     def get_by_user_tg_id(self, user_tg_id: int) -> Optional[UserTargetBase]:
         return (
@@ -44,10 +52,14 @@ class UserDailyRepo:
             .filter(UserTargetBase.user_tg_id == user_tg_id)
             .first()
         )
+
     def get_by_user_tg_id_or_default(self, user_tg_id: int) -> Optional[UserTargetBase]:
-        return (
-            self.get_by_user_tg_id(user_tg_id)
-            or UserTargetBase(user_tg_id=user_tg_id, target_cal=0, target_protein=0, target_fat=0, target_carbohydrates=0)
+        return self.get_by_user_tg_id(user_tg_id) or UserTargetBase(
+            user_tg_id=user_tg_id,
+            target_cal=0,
+            target_protein=0,
+            target_fat=0,
+            target_carbohydrates=0,
         )
 
     def create(self, user_daily: UserTargetBase) -> UserTargetBase:
@@ -62,7 +74,7 @@ class UserDailyRepo:
         return
 
     def delete(self, user_daily_id: int) -> None:
-        user_daily = self.get_by_id(user_daily_id)
+        user_daily = self.get(user_daily_id)
         if user_daily:
             self.session.delete(user_daily)
             self.session.commit()
