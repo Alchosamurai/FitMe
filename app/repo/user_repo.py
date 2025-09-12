@@ -47,11 +47,7 @@ class UserDailyRepo:
         return target.scalar_one_or_none()
 
     def get_by_user_tg_id(self, user_tg_id: int) -> Optional[UserTargetBase]:
-        return (
-            self.session.query(UserTargetBase)
-            .filter(UserTargetBase.user_tg_id == user_tg_id)
-            .first()
-        )
+        return self.session.query(UserTargetBase).filter(UserTargetBase.user_tg_id == user_tg_id).first()
 
     def get_by_user_tg_id_or_default(self, user_tg_id: int) -> Optional[UserTargetBase]:
         return self.get_by_user_tg_id(user_tg_id) or UserTargetBase(

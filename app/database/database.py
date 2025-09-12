@@ -45,7 +45,8 @@ def a_connection(isolation_level: Optional[str] = None):
                 try:
                     if isolation_level:
                         await session.execute(
-                            text(f"BEGIN TRANSACTION ISOLATION LEVEL {isolation_level}")
+                            text(f"BEGIN TRANSACTION ISOLATION LEVEL {
+                                 isolation_level}")
                         )
 
                     result = await method(*args, **kwargs, session=session)
