@@ -1,3 +1,4 @@
+from configparser import Error
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
 from aiogram.types import Message
@@ -5,9 +6,12 @@ import asyncio
 from config import BOT_TOKEN
 from app.telebot.handlers.open_food_handler import open_food_handler, product_callback
 from app.telebot.keyboards.products_list_keyboard import get_report_keyboard
-from aiogram.filters import Text
+from aiogram import F
 
-bot = Bot(token=BOT_TOKEN)
+if BOT_TOKEN:
+    bot = Bot(token=BOT_TOKEN)
+else:
+    raise Error("BOT_TOKEN not found")
 dp = Dispatcher()
 
 
@@ -16,9 +20,9 @@ async def start_command(message: Message):
     await message.answer("Hello, world!", reply_markup=get_report_keyboard())
 
 
-@dp.message(Text("📊 Отчет за день"))
+@dp.message(F.text == "📊 Отчет за день")
 async def report_command(message: Message):
-    await message.answer("Отчет за день", reply_markup=get_report_keyboard())  
+    await message.answer("Отчет за день", reply_markup=get_report_keyboard())
 
 
 dp.message.register(open_food_handler)
